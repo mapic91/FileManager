@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FileManager</title>
+    <script src="static/func.js"></script>
+</head>
+<body>
+<div>
+    <h2>Index of {{ path }}</h2>
+</div>
+<div>
+<table>
+<thead>
+<tr>
+<th>Name</th><th>Size</th><th>Type</th><th>Operation</th>
+</tr>
+</thead>
+<tbody>
+{% for dir in dirs %}
+<tr>
+    <td><a href="{{ '?path=' ~ path ~ dir.name ~'/' }}">{{ dir.name }}/</a></td>
+    <td>-</td>
+    <td>Directory</td>
+    <td><button type="button" onclick="{{ 'deleteDir(\'' ~ path ~ dir.name ~ '/\')' }}">Delete</button>
+        <button type="button" onclick="{{ 'rename(\'' ~ path ~ '\',\'' ~ dir.name ~ '\')' }}">Rename</button></td>
+</tr>
+{% endfor %}
+{% for file in files %}
+<tr>
+    <td>{{ file.name }}</td>
+    <td>{{ file.size|filesizeformat }}</td>
+    <td>{{ file.mimetype }}</td>
+    <td><button type="button" onclick="{{ 'deleteFile(\'' ~ path ~ file.name ~ '\')' }}">Delete</button>
+        <button type="button" onclick="{{ 'rename(\'' ~ path ~ '\',\'' ~ file.name ~ '\')' }}">Rename</button></td>
+</tr>
+{% endfor %}
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><button type="button" onclick="{{ 'deleteAllContent(\'' ~ path ~ '\')' }}">Delete All</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="error_msg" style="color:red"></p>
+</body>
+</html>
