@@ -55,6 +55,8 @@ def delete_all_content_in_folder(path):
 
 @app.route('/', methods=['GET'])
 def index():
+    host = request.host.split(sep=':')[0]
+    download_server = 'http://' + host + ':3000'
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
@@ -77,7 +79,7 @@ def index():
         abs_path = os.path.join(root_path, request_path)
         dirs, files = get_dirs_files(abs_path)
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
-                               files=files)
+                               files=files, download_server=download_server)
 
 
 if __name__ == "__main__":
