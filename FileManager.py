@@ -3,7 +3,7 @@ import os
 import mimetypes
 import shutil
 
-root_path = 'root/web'
+root_path = os.getenv("FileManager_Root_Path")
 app = Flask(__name__)
 
 
@@ -63,5 +63,4 @@ def index():
         return render_template('index.html', path=request_path, dirs=dirs, files=files)
 
 if __name__ == "__main__":
-    root_path = 'E:/temp/test'
     app.run(debug=True)
