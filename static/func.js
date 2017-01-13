@@ -1,3 +1,16 @@
+function utoa(str) {
+    return btoa(encodeURIComponent(str))
+}
+
+function atou(base64str) {
+    return decodeURIComponent(atob(base64str))
+}
+
+function openPath(path) {
+    window.location.href = '?path=' + utoa(path);
+    return false;
+}
+
 function deleteDir(path) {
     if(confirm("Dlelet Dir: " + path + "  ?")) {
         var xhttp = new XMLHttpRequest();
@@ -12,7 +25,7 @@ function deleteDir(path) {
                 }
             }
         };
-        xhttp.open("GET", "?delete=1&dir=1&path=" + path, false);
+        xhttp.open("GET", "?delete=1&dir=1&path=" + utoa(path), false);
         xhttp.send();
     }
 }
@@ -31,7 +44,7 @@ function deleteFile(path) {
                 }
             }
         };
-        xhttp.open("GET", "?delete=1&path=" + path, false);
+        xhttp.open("GET", "?delete=1&path=" + utoa(path), false);
         xhttp.send();
     }
 }
@@ -51,7 +64,7 @@ function deleteAllContent(path) {
                 }
             }
         };
-        xhttp.open("GET", "?deleteall=1&path=" + path, false);
+        xhttp.open("GET", "?deleteall=1&path=" + utoa(path), false);
         xhttp.send();
     }
 }
@@ -71,7 +84,7 @@ function rename(path, oldname) {
                 }
             }
         };
-        xhttp.open("GET", "?rename=1&path=" + path + "&oldname=" + oldname + "&newname=" + newname, false);
+        xhttp.open("GET", "?rename=1&path=" + utoa(path) + "&oldname=" + utoa(oldname) + "&newname=" + utoa(newname), false);
         xhttp.send();
     }
 }

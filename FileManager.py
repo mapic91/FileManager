@@ -2,9 +2,15 @@ from flask import Flask, url_for, request, render_template
 import os
 import mimetypes
 import shutil
+import base64
+from urllib import parse
 
 root_path = os.getenv("FileManager_Root_Path")
 app = Flask(__name__)
+
+
+def decodestr(strdata):
+    return parse.unquote(base64.b64decode(strdata.encode(encoding='ascii')).decode(encoding='ascii'))
 
 
 class DirEntryInfo:
@@ -29,6 +35,16 @@ def get_dirs_files(path):
     return dirs, files
 
 
+def get_path_parts(path):
+    parts = [{'part': 'root', 'path': ''}]  # first root path
+    combined = ''
+    for part in path.split(sep='/'):
+        if part != '':
+            combined = combined + part + '/'
+            parts.append({'part': part, 'path': combined})
+    return parts
+
+
 def delete_all_content_in_folder(path):
     for entry in os.scandir(path):
         if entry.is_dir():
@@ -39,7 +55,7 @@ def delete_all_content_in_folder(path):
 
 @app.route('/', methods=['GET'])
 def index():
-    request_path = request.args.get('path', '')
+    request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
             shutil.rmtree(os.path.join(root_path, request_path), ignore_errors=True)
@@ -51,8 +67,8 @@ def index():
         delete_all_content_in_folder(os.path.join(root_path, request_path))
         return 'OK'
     elif request.args.get('rename', '') == '1':
-        oldname = request.args.get('oldname', '')
-        newname = request.args.get('newname', '')
+        oldname = decodestr(request.args.get('oldname', ''))
+        newname = decodestr(request.args.get('newname', ''))
         if oldname != '' and newname != '':
             os.rename(os.path.join(root_path, request_path, oldname),
                       os.path.join(root_path, request_path, newname))
@@ -60,7 +76,9 @@ def index():
     else:
         abs_path = os.path.join(root_path, request_path)
         dirs, files = get_dirs_files(abs_path)
-        return render_template('index.html', path=request_path, dirs=dirs, files=files)
+        return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
+                               files=files)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
