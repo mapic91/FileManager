@@ -26,7 +26,7 @@
 <tbody>
 {% for dir in dirs %}
 <tr>
-    <td><a href="" onclick="{{ 'return openPath(\'' ~ path ~ dir.name ~'/\')' }}">{{ dir.name }}/</a></td>
+    <td><img src="static/folder.png" style="width: 24px;height: 24px;position: relative; top: 6px;"><a href="" onclick="{{ 'return openPath(\'' ~ path ~ dir.name ~'/\')' }}">{{ dir.name }}/</a></td>
     <td>-</td>
     <td>Directory</td>
     <td><button type="button" onclick="{{ 'deleteDir(\'' ~ path ~ dir.name ~ '/\')' }}">Delete</button>
@@ -35,12 +35,11 @@
 {% endfor %}
 {% for file in files %}
 <tr>
-    <td>{{ file.name }}</td>
+    <td><a href="{{ download_server ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
     <td>{{ file.size|filesizeformat }}</td>
     <td>{{ file.mimetype }}</td>
     <td><button type="button" onclick="{{ 'deleteFile(\'' ~ path ~ file.name ~ '\')' }}">Delete</button>
         <button type="button" onclick="{{ 'rename(\'' ~ path ~ '\',\'' ~ file.name ~ '\')' }}">Rename</button>
-        <a href="{{ download_server ~ '/' ~ path ~ file.name }}">Download</a>
     </td>
 </tr>
 {% endfor %}
