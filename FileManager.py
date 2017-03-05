@@ -78,8 +78,13 @@ def index():
     else:
         abs_path = os.path.join(root_path, request_path)
         dirs, files = get_dirs_files(abs_path)
+        space = shutil.disk_usage(root_path)
+        usage_str = str.format("{0:.2f}/{1:.2f}GB  {2:.2%}",
+                               space.used/1024/1024/1024,
+                               space.total/1024/1024/1024,
+                               space.used/space.total)
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
-                               files=files, download_server=download_server)
+                               files=files, usage_str = usage_str, download_server=download_server)
 
 
 if __name__ == "__main__":
