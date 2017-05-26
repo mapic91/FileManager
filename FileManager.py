@@ -1,5 +1,6 @@
 from flask import Flask, url_for, request, render_template
 import os
+import re
 import mimetypes
 import shutil
 import base64
@@ -7,6 +8,26 @@ from urllib import parse
 
 root_path = os.getenv("FileManager_Root_Path")
 app = Flask(__name__)
+
+
+def tryint(s):
+    try:
+        return int(s)
+    except:
+        return s
+
+
+def alphanum_key(s):
+    """ Turn a string into a list of string and number chunks.
+        "z23a" -> ["z", 23, "a"]
+    """
+    return [tryint(c) for c in re.split('([0-9]+)', s.name)]
+
+
+def sort_names(l):
+    """ Sort the given list in the way that humans expect.
+    """
+    l.sort(key=alphanum_key)
 
 
 def decodestr(strdata):
@@ -78,14 +99,16 @@ def index():
     else:
         abs_path = os.path.join(root_path, request_path)
         dirs, files = get_dirs_files(abs_path)
+        sort_names(dirs)
+        sort_names(files)
         space = shutil.disk_usage(root_path)
         usage_str = str.format("{0:.2f}/{1:.2f}GB[{2:.0%}]>>Free:{3:.2f}GB",
-                               space.used/1024/1024/1024,
-                               space.total/1024/1024/1024,
-                               space.used/space.total,
-                               space.free / 1024 / 1024 / 1024,)
+                               space.used / 1024 / 1024 / 1024,
+                               space.total / 1024 / 1024 / 1024,
+                               space.used / space.total,
+                               space.free / 1024 / 1024 / 1024, )
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
-                               files=files, usage_str = usage_str, download_server=download_server)
+                               files=files, usage_str=usage_str, download_server=download_server)
 
 
 if __name__ == "__main__":
