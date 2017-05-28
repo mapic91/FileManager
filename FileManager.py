@@ -86,7 +86,7 @@ def login():
         if password_error_count < max_password_error_count and request.form.get('pwd', '') == passwod:
             redirect_to_index = redirect(request.args.get('next', '/'))
             response = app.make_response(redirect_to_index)
-            response.set_cookie('pwd', value=passwod)
+            response.set_cookie('pwd', value=passwod, max_age=99999999)
             return response
         else:
             password_error_count += 1
