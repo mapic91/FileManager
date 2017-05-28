@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template
+from flask import Flask, url_for, request, render_template, redirect, send_from_directory
 import os
 import re
 import mimetypes
@@ -7,6 +7,10 @@ import base64
 from urllib import parse
 
 root_path = os.getenv("FileManager_Root_Path")
+passwod = os.getenv("FileManager_Login_Password")
+aria2_path = os.getenv("aria2_path")
+password_error_count = 0
+max_password_error_count = 5
 app = Flask(__name__)
 
 
@@ -74,8 +78,35 @@ def delete_all_content_in_folder(path):
             os.remove(os.path.join(path, entry.name))
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    msg = None
+    global password_error_count
+    if request.method == 'POST':
+        if password_error_count < max_password_error_count and request.form.get('pwd', '') == passwod:
+            redirect_to_index = redirect(request.args.get('next', '/'))
+            response = app.make_response(redirect_to_index)
+            response.set_cookie('pwd', value=passwod)
+            return response
+        else:
+            password_error_count += 1
+            msg = "Password not correct."
+    return render_template('login.html', msg=msg)
+
+
+def not_login():
+    return request.cookies.get('pwd') != passwod
+
+
+def to_login(current_path):
+    return redirect(url_for('login', next=current_path))
+
+
 @app.route('/', methods=['GET'])
 def index():
+    if not_login():
+        return to_login(request.full_path)
+
     host = request.host.split(sep=':')[0]
     download_server = 'http://' + host + ':3000'
     request_path = decodestr(request.args.get('path', ''))
@@ -110,6 +141,14 @@ def index():
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
                                files=files, usage_str=usage_str, download_server=download_server)
 
+
+@app.route('/aria2/', defaults={'filename': None}, methods=['GET'])
+@app.route('/aria2/<path:filename>', methods=['GET'])
+def aria2(filename):
+    if not_login():
+        return to_login(request.full_path)
+    filename = filename or 'index.html'
+    return send_from_directory(aria2_path, filename=filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
