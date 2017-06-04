@@ -1,4 +1,5 @@
 from flask import Flask, url_for, request, render_template, redirect, send_from_directory
+from werkzeug.utils import secure_filename
 import os
 import re
 import mimetypes
@@ -12,7 +13,7 @@ aria2_path = os.getenv("aria2_path")
 password_error_count = 0
 max_password_error_count = 5
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLODER'] = root_path
 
 def tryint(s):
     try:
@@ -140,6 +141,30 @@ def index():
                                space.free / 1024 / 1024 / 1024, )
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
                                files=files, usage_str=usage_str, download_server=download_server)
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if not_login():
+        return to_login(request.full_path)
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            return redirect(request.url)
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLODER'], filename))
+        return redirect(request.url)
+    return '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <form method=post enctype=multipart/form-data>
+          <p><input type=file name=file>
+             <input type=submit value=Upload>
+        </form>
+        '''
 
 
 @app.route('/aria2/', defaults={'filename': None}, methods=['GET'])
