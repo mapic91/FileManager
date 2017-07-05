@@ -109,7 +109,7 @@ def index():
         return to_login(request.full_path)
 
     host = request.host.split(sep=':')[0]
-    download_server = 'http://' + host + ':3000'
+    download_server = 'https://' + host + ':3001'
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
