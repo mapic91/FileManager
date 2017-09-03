@@ -93,6 +93,11 @@ function deleteSelected() {
     }
 }
 
+function onselected(event) {
+    var nameItem = this.parentNode.parentNode.children[1];
+    nameItem.classList.toggle('item_checked');
+}
+
 function rename(path, oldname) {
     var newname = prompt("New name:", oldname);
     if(newname != null) {
@@ -112,3 +117,16 @@ function rename(path, oldname) {
         xhttp.send();
     }
 }
+
+function init() {
+    var allchecks = document.querySelectorAll("input[type=checkbox]");
+    for(var i = 0; i < allchecks.length; ++i) {
+        var c = allchecks[i];
+        if(c.name == "floder" || c.name == "file") {
+            console.log(c.name);
+            c.onclick = onselected;
+        }
+    }
+}
+
+window.onload = init;
