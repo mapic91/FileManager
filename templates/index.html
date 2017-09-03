@@ -20,12 +20,13 @@
 <table>
 <thead>
 <tr>
-<th>Name</th><th>Size</th><th>Type</th><th>Operation</th>
+    <th></th><th>Name</th><th>Size</th><th>Type</th><th>Operation</th>
 </tr>
 </thead>
 <tbody>
 {% for dir in dirs %}
 <tr>
+    <td> <input type="checkbox" name="floder" value="{{path ~ dir.name}}" style="position:relative; top: 4px"> </td>
     <td><img src="static/folder.png" style="width: 24px;height: 24px;position: relative; top: 6px;"><a href="" onclick="{{ 'return openPath(\'' ~ path ~ dir.name ~'/\')' }}">{{ dir.name }}/</a></td>
     <td>-</td>
     <td>Directory</td>
@@ -35,6 +36,7 @@
 {% endfor %}
 {% for file in files %}
 <tr>
+    <td> <input type="checkbox" name="file" value="{{path ~ file.name}}"> </td>
     <td><a href="{{ download_server ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
     <td>{{ file.size|filesizeformat }}</td>
     <td>{{ file.mimetype }}</td>
@@ -47,7 +49,9 @@
     <td></td>
     <td></td>
     <td></td>
-    <td><button type="button" onclick="{{ 'deleteAllContent(\'' ~ path ~ '\')' }}">Delete All</button></td>
+    <td></td>
+    <td><button type="button" onclick="{{ 'deleteSelected()' }}">DeleteSelected</button>
+        <button type="button" onclick="{{ 'deleteAllContent(\'' ~ path ~ '\')' }}">DeleteAll</button></td>
 </tr>
 </tbody>
 </table>

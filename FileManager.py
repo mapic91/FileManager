@@ -143,6 +143,21 @@ def index():
                                files=files, usage_str=usage_str, download_server=download_server)
 
 
+@app.route('/deletselections', methods=['POST'])
+def deletselections():
+    if not_login():
+        return to_login(request.full_path)
+    else:
+        paths = request.get_json()
+        if paths is not None:
+            for item in paths:
+                if item['type'] == 'floder':
+                    shutil.rmtree(os.path.join(root_path, item['value']), ignore_errors=True)
+                elif item['type'] == 'file':
+                    os.remove(os.path.join(root_path, item['value']))
+        return 'OK'
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if not_login():
