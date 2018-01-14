@@ -191,4 +191,4 @@ def aria2(filename):
     return send_from_directory(aria2_path, filename=filename)
 
 if __name__ == "__main__":
-    app.run(debug=True, ssl_context=('server.crt','server.key'))
+    app.run(host='0.0.0.0', debug=True, ssl_context=('server.crt','server.key'))
