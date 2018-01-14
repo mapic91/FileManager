@@ -7,7 +7,7 @@ function atou(base64str) {
 }
 
 function openPath(path) {
-    window.location.href = '?path=' + utoa(path);
+    window.location.href = '?path=' + encodeURIComponent(utoa(path));
     return false;
 }
 
