@@ -69,6 +69,10 @@ function deleteAllContent(path) {
     }
 }
 
+function selectAll() {
+    document.querySelectorAll("input[type=checkbox]").forEach(function (c) { c.checked = true; })
+}
+
 function deleteSelected() {
     var files = [].slice.apply(document.querySelectorAll("input[type=checkbox]"))
         .filter(function(c){ return (c.name == "floder" || c.name == "file") && c.checked; })
