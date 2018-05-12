@@ -12,7 +12,7 @@
         {% if loop.last %}
         {{ part.part }}
         {% else %}
-        <a href="" onclick="{{ 'return openPath(\'' ~ part.path ~ '\')' }}">{{ part.part }}</a>/
+        <a href="" onclick="{{ 'return openPath("' ~ part.path ~ '")' }}">{{ part.part }}</a>/
         {% endif %}
         {%- endfor -%}
     </h2>
@@ -28,11 +28,11 @@
 {% for dir in dirs %}
 <tr>
     <td> <input type="checkbox" name="floder" value="{{path ~ dir.name}}" style="position:relative; top: 4px"> </td>
-    <td><img src="static/folder.png" style="width: 24px;height: 24px;position: relative; top: 6px;"><a href="" onclick="{{ 'return openPath(\'' ~ path ~ dir.name ~'/\')' }}">{{ dir.name }}/</a></td>
+    <td><img src="static/folder.png" style="width: 24px;height: 24px;position: relative; top: 6px;"><a href="" onclick="{{ 'return openPath("' ~ path ~ dir.name ~'/")' }}">{{ dir.name }}/</a></td>
     <td>-</td>
     <td>Directory</td>
-    <td><button type="button" onclick="{{ 'deleteDir(\'' ~ path ~ dir.name ~ '/\')' }}">Delete</button>
-        <button type="button" onclick="{{ 'rename(\'' ~ path ~ '\',\'' ~ dir.name ~ '\')' }}">Rename</button></td>
+    <td><button type="button" onclick="{{ 'deleteDir("' ~ path ~ dir.name ~ '/")' }}">Delete</button>
+        <button type="button" onclick="{{ 'rename("' ~ path ~ '","' ~ dir.name ~ '")' }}">Rename</button></td>
 </tr>
 {% endfor %}
 {% for file in files %}
@@ -41,8 +41,8 @@
     <td><a href="{{ download_server ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
     <td>{{ file.size|filesizeformat }}</td>
     <td>{{ file.mimetype }}</td>
-    <td><button type="button" onclick="{{ 'deleteFile(\'' ~ path ~ file.name ~ '\')' }}">Delete</button>
-        <button type="button" onclick="{{ 'rename(\'' ~ path ~ '\',\'' ~ file.name ~ '\')' }}">Rename</button>
+    <td><button type="button" onclick="{{ 'deleteFile("' ~ path ~ file.name ~ '")' }}">Delete</button>
+        <button type="button" onclick="{{ 'rename("' ~ path ~ '","' ~ file.name ~ '")' }}">Rename</button>
     </td>
 </tr>
 {% endfor %}
@@ -53,7 +53,7 @@
     <td></td>
     <td><button type="button" onclick="{{ 'selectAll()' }}">SelectAll</button>
         <button type="button" onclick="{{ 'deleteSelected()' }}">DeleteSelected</button>
-        <button type="button" onclick="{{ 'deleteAllContent(\'' ~ path ~ '\')' }}">DeleteAll</button></td>
+        <button type="button" onclick="{{ 'deleteAllContent("' ~ path ~ '")' }}">DeleteAll</button></td>
 </tr>
 </tbody>
 </table>
