@@ -38,7 +38,7 @@
 {% for file in files %}
 <tr>
     <td> <input type="checkbox" name="file" value="{{path ~ file.name}}"> </td>
-    <td><a href="{{ download_server ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
+    <td><a href="{{ 'download' ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
     <td>{{ file.size|filesizeformat }}</td>
     <td>{{ file.mimetype }}</td>
     <td><button type="button" onclick="{{ 'deleteFile("' ~ path ~ file.name ~ '")' }}">Delete</button>

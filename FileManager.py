@@ -108,8 +108,6 @@ def index():
     if not_login():
         return to_login(request.full_path)
 
-    host = request.host.split(sep=':')[0]
-    download_server = 'https://' + host + ':3001'
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
@@ -140,7 +138,7 @@ def index():
                                space.used / space.total,
                                space.free / 1024 / 1024 / 1024, )
         return render_template('index.html', path_parts=get_path_parts(request_path), path=request_path, dirs=dirs,
-                               files=files, usage_str=usage_str, download_server=download_server)
+                               files=files, usage_str=usage_str)
 
 
 @app.route('/deletselections', methods=['POST'])
@@ -156,6 +154,11 @@ def deletselections():
                 elif item['type'] == 'file':
                     os.remove(os.path.join(root_path, item['value']))
         return 'OK'
+
+
+@app.route('/download/<path:filename>', methods=['GET'])
+def downloadfile(filename):
+    return send_from_directory(root_path, filename=filename)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -189,6 +192,7 @@ def aria2(filename):
         return to_login(request.full_path)
     filename = filename or 'index.html'
     return send_from_directory(aria2_path, filename=filename)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, ssl_context=('server.crt','server.key'))
