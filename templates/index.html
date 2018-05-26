@@ -41,7 +41,8 @@
     <td><a href="{{ download_server ~ '/' ~ path ~ file.name }}">{{ file.name }}</a></td>
     <td>{{ file.size|filesizeformat }}</td>
     <td>{{ file.mimetype }}</td>
-    <td><button type="button" onclick="{{ 'deleteFile("' ~ path ~ file.name ~ '")' }}">Delete</button>
+    <td><button type="button" onclick="{{ 'playFile("' ~ path ~ file.name ~ '")' }}">Play</button>
+        <button type="button" onclick="{{ 'deleteFile("' ~ path ~ file.name ~ '")' }}">Delete</button>
         <button type="button" onclick="{{ 'rename("' ~ path ~ '","' ~ file.name ~ '")' }}">Rename</button>
     </td>
 </tr>

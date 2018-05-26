@@ -158,6 +158,16 @@ def deletselections():
         return 'OK'
 
 
+@app.route('/play', defaults={'filename': None}, methods=['GET'])
+@app.route('/play/<path:filename>', methods=['GET'])
+def play(filename):
+    if not_login():
+        return to_login(request.full_path)
+    host = request.host.split(sep=':')[0]
+    filepath = 'https://' + host + ':3001/' + filename
+    return render_template('play.html', filepath=filepath)
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if not_login():

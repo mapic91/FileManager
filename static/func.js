@@ -30,6 +30,10 @@ function deleteDir(path) {
     }
 }
 
+function playFile(path) {
+    window.open('play/' + path, '_blank');
+}
+
 function deleteFile(path) {
     if(confirm("Dlelet Dir: " + path + "  ?")) {
         var xhttp = new XMLHttpRequest();
