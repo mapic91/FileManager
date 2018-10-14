@@ -101,6 +101,30 @@ function deleteSelected() {
     }
 }
 
+function getDownLoadLinks() {
+    var files = [].slice.apply(document.querySelectorAll("input[type=checkbox]"))
+        .filter(function(c){ return (c.name == "floder" || c.name == "file") && c.checked; })
+        .map(function(c) {return {type:c.name, value: c.value};});
+    var jsonStr = JSON.stringify(files)
+    if(files.length > 0 ) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            console.log("xmlhttprequest status: " + this.status + " readyState: " + this.readyState);
+            if (this.readyState == 4 && this.status != 0) {
+                if (this.status == 200) {
+                    document.getElementById('respond_txt').innerText = xhttp.responseText;
+                }
+                else {
+                    document.getElementById('error_msg').innerText = "Get download links failed!";
+                }
+            }
+        };
+        xhttp.open("POST", "/getdownloadurl", false);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(jsonStr);
+    }
+}
+
 function onselected(event) {
     var nameItem = this.parentNode.parentNode.children[1];
     nameItem.classList.toggle('item_checked');

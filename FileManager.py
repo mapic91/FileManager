@@ -79,6 +79,14 @@ def delete_all_content_in_folder(path):
             os.remove(os.path.join(path, entry.name))
 
 
+def get_all_download_link(serveraddr, dirpath, links):
+    for r, d, f in os.walk(dirpath):
+        for fn in f:
+            links.append(serveraddr + os.path.relpath(os.path.join(r, fn), root_path))
+        for dn in d:
+            get_all_download_link(serveraddr, os.path.join(r, dn), links)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = None
@@ -156,6 +164,24 @@ def deletselections():
                 elif item['type'] == 'file':
                     os.remove(os.path.join(root_path, item['value']))
         return 'OK'
+
+
+@app.route('/getdownloadurl', methods=['POST'])
+def getdownloadurl():
+    if not_login():
+        return to_login(request.full_path)
+    else:
+        paths = request.get_json()
+        links = []
+        host = request.host.split(sep=':')[0]
+        downloadserver = 'https://' + host + ':3001/'
+        if paths is not None:
+            for item in paths:
+                if item['type'] == 'floder':
+                    get_all_download_link(downloadserver, os.path.join(root_path, item['value']), links)
+                elif item['type'] == 'file':
+                    links.append(downloadserver + item['value'])
+        return "\n".join(links)
 
 
 @app.route('/play', defaults={'filename': None}, methods=['GET'])
