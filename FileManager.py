@@ -83,8 +83,6 @@ def get_all_download_link(serveraddr, dirpath, links):
     for r, d, f in os.walk(dirpath):
         for fn in f:
             links.append(serveraddr + os.path.relpath(os.path.join(r, fn), root_path))
-        for dn in d:
-            get_all_download_link(serveraddr, os.path.join(r, dn), links)
 
 
 @app.route('/login', methods=['GET', 'POST'])
