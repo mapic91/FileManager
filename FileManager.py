@@ -188,7 +188,7 @@ def play(filename):
     if not_login():
         return to_login(request.full_path)
     host = request.host.split(sep=':')[0]
-    filepath = 'https://' + host + ':3001/' + filename
+    filepath = 'http://' + host + ':3000/' + filename
     return render_template('play.html', filepath=filepath)
 
 
@@ -223,6 +223,7 @@ def aria2(filename):
         return to_login(request.full_path)
     filename = filename or 'index.html'
     return send_from_directory(aria2_path, filename=filename)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, ssl_context=('server.crt','server.key'))
