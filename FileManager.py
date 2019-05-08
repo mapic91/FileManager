@@ -134,8 +134,17 @@ def index():
             os.rename(os.path.join(root_path, request_path, oldname),
                       os.path.join(root_path, request_path, newname))
             return 'OK'
+    elif request.args.get('move', '') == "1":
+        try:
+            shutil.move(request_path, root_path)
+        except Exception as e:
+            return str(e)
+        return 'OK'
     else:
-        abs_path = os.path.join(root_path, request_path)
+        if request_path == "/":
+            abs_path = "/"
+        else:
+            abs_path = os.path.join(root_path, request_path)
         dirs, files = get_dirs_files(abs_path)
         sort_names(dirs)
         sort_names(files)

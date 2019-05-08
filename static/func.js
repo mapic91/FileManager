@@ -30,6 +30,29 @@ function deleteDir(path) {
     }
 }
 
+function move(path) {
+    if(confirm("Move to web: " + path + "  ?")) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            console.log("xmlhttprequest status: " + this.status + " readyState: " + this.readyState);
+            if (this.readyState == 4 && this.status != 0) {
+                if (this.status == 200) {
+                    if(this.responseText == "OK") {
+                        location.reload(true)
+                    } else {
+                        document.getElementById('error_msg').innerText = this.responseText
+                    }
+                }
+                else {
+                    document.getElementById('error_msg').innerText = 'Move [' + path + "] failed!"
+                }
+            }
+        };
+        xhttp.open("GET", "?move=1&path=" + utoa(path), false);
+        xhttp.send();
+    }
+}
+
 function playFile(path) {
     window.open('play/' + path, '_blank');
 }
