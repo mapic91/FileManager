@@ -197,7 +197,7 @@ def play(filename):
     if not_login():
         return to_login(request.full_path)
     host = request.host.split(sep=':')[0]
-    filepath = 'http://' + host + '/' + filename
+    filepath = 'https://' + host + '/' + filename
     return render_template('play.html', filepath=filepath)
 
 
