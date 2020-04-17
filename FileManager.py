@@ -115,7 +115,7 @@ def index():
         return to_login(request.full_path)
 
     host = request.host.split(sep=':')[0]
-    download_server = 'https://' + host + ':3001'
+    download_server = 'https://' + host
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
@@ -181,7 +181,7 @@ def getdownloadurl():
         paths = request.get_json()
         links = []
         host = request.host.split(sep=':')[0]
-        downloadserver = 'https://' + host + ':3001/'
+        downloadserver = 'https://' + host + '/'
         if paths is not None:
             for item in paths:
                 if item['type'] == 'floder':
@@ -197,7 +197,7 @@ def play(filename):
     if not_login():
         return to_login(request.full_path)
     host = request.host.split(sep=':')[0]
-    filepath = 'http://' + host + ':3000/' + filename
+    filepath = 'http://' + host + '/' + filename
     return render_template('play.html', filepath=filepath)
 
 
