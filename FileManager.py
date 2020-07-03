@@ -10,6 +10,7 @@ from urllib import parse
 root_path = os.getenv("FileManager_Root_Path")
 passwod = os.getenv("FileManager_Login_Password")
 aria2_path = os.getenv("aria2_path")
+download_server = os.getenv("download_server")
 password_error_count = 0
 max_password_error_count = 5
 app = Flask(__name__)
@@ -114,7 +115,6 @@ def index():
     if not_login():
         return to_login(request.full_path)
 
-    download_server = 'https://filemanager.zhangqiangws.space'
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
