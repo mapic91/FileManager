@@ -114,8 +114,7 @@ def index():
     if not_login():
         return to_login(request.full_path)
 
-    host = request.host.split(sep=':')[0]
-    download_server = 'https://' + host
+    download_server = 'https://filemanager.zhangqiangws.space'
     request_path = decodestr(request.args.get('path', ''))
     if request.args.get('delete', '') == '1':
         if request.args.get('dir', '') == '1':
