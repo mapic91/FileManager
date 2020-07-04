@@ -180,7 +180,7 @@ def getdownloadurl():
         paths = request.get_json()
         links = []
         host = request.host.split(sep=':')[0]
-        downloadserver = 'https://' + host + '/'
+        downloadserver = download_server + '/'
         if paths is not None:
             for item in paths:
                 if item['type'] == 'floder':
