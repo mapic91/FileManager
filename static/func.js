@@ -97,7 +97,10 @@ function deleteAllContent(path) {
 }
 
 function selectAll() {
-    document.querySelectorAll("input[type=checkbox]").forEach(function (c) { c.checked = true; })
+    document.querySelectorAll("input[type=checkbox]").forEach(function (c) {
+        c.checked = true;
+        c.parentNode.parentNode.children[1].classList.add("item_checked")
+    })
 }
 
 function deleteSelected() {
